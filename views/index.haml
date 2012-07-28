@@ -1,0 +1,47 @@
+!!! 5
+= @compound.neighbors.size
+%table
+  %tr
+    %th Structure
+    %th Properties
+    %th Targets
+    %th Assays
+  - @compound.neighbors.each do |neighbor|
+    %tr
+      %td
+        = neighbor.name
+        %img{:src => neighbor.image}
+        %dl
+          %dt Similarity
+          %dd
+            = neighbor.tanimoto
+      %td
+        %dl
+          - neighbor.properties.each do |p,v|
+            %dt 
+              = p
+            %dd
+              = v
+      %td
+        %dl
+          %dt Similarity
+          %dd
+            = neighbor.target_similarity @compound.neighbors.first
+          %dt Targets
+          %dd
+            = neighbor.targets.uniq
+          %dt Total
+          %dd
+            = neighbor.targets.size + neighbor.non_targets.size
+      %td
+        %dl
+          %dt Similarity
+          %dd
+            = neighbor.assay_similarity @compound.neighbors.first
+          %dt Active
+          %dd
+            = neighbor.active_assays.collect{|a| a["Assay Name"]}
+          %dt Total
+          %dd
+            = neighbor.active_assays.size + neighbor.inactive_assays.size
+            =# neighbor.inactive_assays.collect{|a| a["Assay Name"]}
