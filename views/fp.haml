@@ -1,0 +1,41 @@
+!!! 5
+%style{:type => "text/css" }
+  //dt { float: left; clear: left; width: 100px; text-align: right; font-weight: bold; color: green; }
+  //dt {  float: left; clear: left; text-align: left; font-weight: bold; color: green; }
+  table { border-top: 2px black }
+  dl {text-align:left;}
+  dt { display: inline; text-align: left; font-weight: bold; color: green; }
+  dt:after { content: ": "; }
+  dd {  display: inline; text-align: left; margin:0 }
+  dd:after { content: '\A'; white-space: pre; }
+- @fp.each do |p|
+  %table{:class => "sortable"}
+    %tr
+      %th
+        %img{:src => "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/#{p["CID"]}/PNG"}
+      %th
+        %dl
+          - [ "CID", "Target GI", "p_active", "p_inactive" ].each do |k|
+            %dt= k
+            %dd= p[k]
+      - p[:assays].each do |a|
+        %th
+          %dl
+            - a.each do |k,v|
+              %dt= k
+              %dd= v
+      - p[:neighbors].each do |n|
+        %tr
+          %td
+            %img{:src => "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/#{n[:cid]}/PNG"}
+          %td
+            %dl
+              - ["CID", "Similarity"].each do |k|
+                %dt= k
+                %dd= n[k.downcase.to_sym]
+          - n[:assays].each do |a|
+            %td
+              %dl
+                - a.each do |k,v|
+                  %dt= k
+                  %dd= v

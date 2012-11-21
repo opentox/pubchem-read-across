@@ -1,0 +1,43 @@
+%script{:type => "text/javascript", :src  => "sorttable.js"}
+%table{:class => "sortable"}
+  - session[:compound].neighbors[0..10].each do |compound|
+    %tr
+      %td{:valign => "top"}
+        %img{:src => compound.image_uri}
+      %td{:id => "sim#{compound.cid}", :valign => "top"}
+        %img{:src => "/spinning-wait-icons/wait30trans.gif"}
+        :javascript
+          $.ajax({
+            url: "/cid/#{session[:compound].cid}/cosine/#{compound.cid}",
+            success: function(data){
+              $("#sim#{compound.cid}").html(data);
+            },
+            error: function(data,textStatus,message){
+              $("#sim#{compound.cid}").html(message);
+            }
+          });
+      %td{:id => "targets#{compound.cid}", :valign => "top"}
+        %img{:src => "/spinning-wait-icons/wait30trans.gif"}
+        :javascript
+          $.ajax({
+            url: "/cid/#{compound.cid}/targets",
+            success: function(data){
+              $("#targets#{compound.cid}").html(data);
+            },
+            error: function(data,textStatus,message){
+              $("#targets#{compound.cid}").html(message);
+            }
+          });
+      %td{:id => "assays#{compound.cid}", :valign => "top"}
+        %img{:src => "/spinning-wait-icons/wait30trans.gif"}
+        :javascript
+          $.ajax({
+            url: "/cid/#{compound.cid}/other_active_assays",
+            success: function(data){
+              $("#assays#{compound.cid}").html(data);
+            },
+            error: function(data,textStatus,message){
+              $("#assays#{compound.cid}").html(message);
+            }
+          });
+      %td

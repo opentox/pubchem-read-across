@@ -7,7 +7,7 @@ class AOPTest < Test::Unit::TestCase
 
   def setup
     @pug_uri = "http://pubchem.ncbi.nlm.nih.gov/rest/pug/"
-    @compound = OpenTox::PubChemCompound.new
+    @compound = OpenTox::PubChemCompound.new #3036
     @compound.cid = 1983
     #@compound.from_name "2,4-D"
   end
@@ -18,8 +18,9 @@ class AOPTest < Test::Unit::TestCase
     puts @compound.to_smiles
     puts "measured targets"
     puts @compound.targets.collect{|t| t["Target Name"]}.to_yaml
+=begin
     puts "predicted targets"
-    puts @compound.predicted_targets.select{|t| t[:prediction] == "active"}.to_yaml
+    puts @compound.predicted_targets.select{|t| t[:prediction] == "active"}.size
 
     puts "predicted non_targets"
     puts @compound.predicted_targets.select{|t| t[:prediction] == "inactive"}.size
@@ -38,8 +39,11 @@ class AOPTest < Test::Unit::TestCase
     puts (predicted_nontarget_gis - measured_nontarget_gis).size
     print "incorrect predicted targets: "
     puts (measured_nontarget_gis & predicted_target_gis).size
+    puts (measured_nontarget_gis & predicted_target_gis).sort.to_yaml
+    puts @compound.predicted_targets.select{|t| t[:prediction] == "active"}.to_yaml
     print "incorrect predicted non-targets: "
     puts (measured_target_gis & predicted_nontarget_gis).size
+=end
 =begin
     @compound.neighbors.each do |n|
       #print n.cid

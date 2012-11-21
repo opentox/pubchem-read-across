@@ -1,0 +1,6 @@
+%ul
+  - @assays.each do |assay|
+    %li
+      %a{:href => "/aid/#{assay["AID"]}"} #{assay['Assay Name']}
+      AID:
+      = assay["AID"]

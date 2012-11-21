@@ -1,0 +1,26 @@
+!!! 5
+%html
+  %head
+    %script{:type => "text/javascript", :src  => "jquery-1.8.2.js"}
+    :javascript
+      function display(element,uri) {
+        $(element).html("<img src=\"/spinning-wait-icons/wait30trans.gif\" alt=\"Searching PubChem\">");
+        $.ajax({
+          url: uri,
+          success: function(data){
+            $(element).html(data);
+          },
+          error: function(data,textStatus,message){
+            $(element).html(message);
+          }
+        });
+      }
+
+  %body
+    %h1 adverse outcome pathways
+    %form{:name => "form", :action => '/search', :method => "GET"}
+      %fieldset
+        %label{:for => 'identifier'} Compound name:
+        %input{:type => 'text', :name => 'name', :id => 'name', :size => '60'}
+        %input{ :type => "submit", :value => "Predict" }
+    = yield

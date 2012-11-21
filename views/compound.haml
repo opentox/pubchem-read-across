@@ -1,0 +1,46 @@
+:javascript
+  $(document).ready(function() {
+    display(".targets", "/cid/#{session[:compound].cid}/targets");
+    //display(".nontargets", "/cid/#{session[:compound].cid}/targets");
+    display(".active_assays", "/cid/#{session[:compound].cid}/other_active_assays");
+    //display(".inactive_assays", "/cid/#{session[:compound].cid}/other_active_assays");
+    display(".predicted_targets", "/cid/#{session[:compound].cid}/predicted_targets");
+    display(".predicted_active_assays", "/cid/#{session[:compound].cid}/other_predicted_active_assays");
+    display(".neighbors", "/cid/#{session[:compound].cid}/neighbors");
+  });
+
+%script{:type => "text/javascript", :src  => "sorttable.js"}
+%table{:class => "sortable"}
+  %tr
+    %th Structure
+    %th 
+    %th Targets (experimental data)
+    %th Other assays (experimental data)
+  %tr
+    %td{:valign => "top"}
+      %img{:src => session[:compound].image_uri}
+    %td
+    %td{:valign => "top"}
+      .targets
+      -# %h2 Non-Targets
+        .nontargets
+    %td{:valign => "top"}
+      .active_assays
+      -# %h2 Inactive assays
+        .inactive_assays
+  %tr
+    %th 
+    %th 
+    %th Targets (predicted)
+    %th Other assays (predicted)
+  %tr
+    %td
+    %td
+    %td{:valign => "top"}
+      .predicted_targets
+    %td{:valign => "top"}
+      .predicted_active_assays
+
+%h2 Neighbors
+.neighbors
+
