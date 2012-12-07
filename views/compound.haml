@@ -1,46 +1,65 @@
-:javascript
-  $(document).ready(function() {
-    display(".targets", "/cid/#{session[:compound].cid}/targets");
-    //display(".nontargets", "/cid/#{session[:compound].cid}/targets");
-    display(".active_assays", "/cid/#{session[:compound].cid}/other_active_assays");
-    //display(".inactive_assays", "/cid/#{session[:compound].cid}/other_active_assays");
-    display(".predicted_targets", "/cid/#{session[:compound].cid}/predicted_targets");
-    display(".predicted_active_assays", "/cid/#{session[:compound].cid}/other_predicted_active_assays");
-    display(".neighbors", "/cid/#{session[:compound].cid}/neighbors");
-  });
-
 %script{:type => "text/javascript", :src  => "sorttable.js"}
 %table{:class => "sortable"}
   %tr
     %th Structure
-    %th 
     %th Targets (experimental data)
-    %th Other assays (experimental data)
+    %th Other active assays (experimental data)
   %tr
     %td{:valign => "top"}
+      %br= session[:compound].name
       %img{:src => session[:compound].image_uri}
-    %td
     %td{:valign => "top"}
       .targets
-      -# %h2 Non-Targets
-        .nontargets
+      :javascript
+        display(".targets", "/cid/#{session[:compound].cid}/targets");
     %td{:valign => "top"}
       .active_assays
-      -# %h2 Inactive assays
-        .inactive_assays
+      :javascript
+        display(".active_assays", "/cid/#{session[:compound].cid}/other_active_assays");
   %tr
-    %th 
     %th 
     %th Targets (predicted)
-    %th Other assays (predicted)
+    %th Other active assays (predicted)
   %tr
-    %td
     %td
     %td{:valign => "top"}
       .predicted_targets
+      :javascript
+        display(".predicted_targets", "/cid/#{session[:compound].cid}/predicted_targets");
     %td{:valign => "top"}
       .predicted_active_assays
+      :javascript
+        display(".predicted_active_assays", "/cid/#{session[:compound].cid}/other_predicted_active_assays");
+  %tr
+    %th 
+    %th Non-targets (experimental data)
+    %th Other inactive assays (experimental data)
+  %tr
+    %td
+    %td{:valign => "top"}
+      .nontargets
+      :javascript
+        display(".nontargets", "/cid/#{session[:compound].cid}/nontargets");
+    %td{:valign => "top"}
+      .inactive_assays
+      :javascript
+        display(".inactive_assays", "/cid/#{session[:compound].cid}/other_inactive_assays");
+  %tr
+    %th 
+    %th Non-targets (predicted)
+    %th Other inactive assays (predicted)
+  %tr
+    %td
+    %td{:valign => "top"}
+      .predicted_nontargets
+      :javascript
+        display(".predicted_nontargets", "/cid/#{session[:compound].cid}/predicted_nontargets");
+    %td{:valign => "top"}
+      .predicted_inactive_assays
+      :javascript
+        display(".predicted_inactive_assays", "/cid/#{session[:compound].cid}/other_predicted_inactive_assays");
 
-%h2 Neighbors
+%h2 Read across compounds
 .neighbors
-
+:javascript
+  display(".neighbors", "/cid/#{session[:compound].cid}/neighbors");

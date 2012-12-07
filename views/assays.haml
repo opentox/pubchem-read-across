@@ -1,6 +1,7 @@
-%ul
-  - @assays.each do |assay|
-    %li
-      %a{:href => "/aid/#{assay["AID"]}"} #{assay['Assay Name']}
-      AID:
-      = assay["AID"]
+%dl
+  - @assays.sort{|a,b| a["Assay Name"] <=> b["Assay Name"]}.each do |assay|
+    %dt
+      %a{:href => "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay["AID"]}"} #{assay['Assay Name']}
+    %dd
+      Assay ID:
+      %a{:href => "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay["AID"]}"} #{assay['AID']}

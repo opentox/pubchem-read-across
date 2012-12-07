@@ -1,6 +1,11 @@
-%ul
-  - @assays.each do |assay|
-    %li
-      %a{:href => "/aid/#{assay["AID"]}"} #{assay['Target Name']}
-      Target GI:
-      = assay['Target GI']
+%dl
+  - @assays.collect{|a| [a["Target Name"],a["Target GI"]]}.uniq.sort{|a,b| a[0] <=> b[0]}.each do |target|
+    %dt= target.first
+    %dd
+      Target GeneID:
+      = target.last
+    %dd
+      Assay IDs:
+      - @assays.select{|a| a["Target GI"] == target.last}.each do |assay|
+        %a{:href => "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay["AID"]}"} #{assay['AID']}
+          

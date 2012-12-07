@@ -1,6 +1,13 @@
 require '../opentox-client/lib/opentox-client.rb'
 require 'json'
 require 'base64'
+require 'restclient/components'
+require 'rack/cache'
+#RestClient.enable Rack::Cache, :verbose => true#, :allow_reload => true, :allow_revalidate => true
+RestClient.enable Rack::Cache, 
+  :verbose => true,
+  :metastore => 'file:/tmp/cache/meta', 
+  :entitystore => 'file:/tmp/cache/body'
 
 def Math.gauss(x, sigma = 0.3) 
   d = 1.0 - x.to_f
@@ -15,10 +22,11 @@ module OpenTox
     attr_accessor :similarity, :p, :assays
     
     def initialize cid=nil
-      @pug_uri = "http://pubchem.ncbi.nlm.nih.gov/rest/pug/"
+      #@pug_uri = "http://pubchem.ncbi.nlm.nih.gov/rest/pug/"
+      @pug_uri = "http://localhost:8081/"
       @cid = cid
       @assays = nil
-      @similarity_threshold = 85
+      @similarity_threshold = 90
       @neighbors = nil
       @predicted_assays = nil
       #@predicted_targets = nil
@@ -42,7 +50,7 @@ module OpenTox
       pug_uri = "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name"
       compounds = []
       session[:name] = name
-      cid = RestClientWrapper.get(File.join(pug_uri,URI.escape(name),"cids","TXT"))
+      cid = RestClient.get(File.join(pug_uri,URI.escape(name),"cids","TXT"))
       #puts response
       #response.split("\n") do |cid|
         puts cid
@@ -51,6 +59,10 @@ module OpenTox
         compounds << compound
       #end
       compounds
+    end
+
+    def name
+      RestClient.get File.join(@pug_uri, "compound", "cid", cid.to_s, "property", "IUPACName","TXT").chomp
     end
 
     def neighbors
@@ -63,11 +75,11 @@ module OpenTox
           result = pubchem_search File.join(@pug_uri, "compound", "listkey", listkey, "cids", "JSON")
           #result = pubchem_search File.join(@pug_uri, "compound", "listkey", listkey, "assaysummary", "JSON")
         end
-        puts "Neighbor CIDs received"
+        puts "#{result["IdentifierList"]["CID"].size} Neighbor CIDs received"
         result["IdentifierList"]["CID"].each do |cid|
           unless cid.to_s == @cid.to_s
             c = PubChemCompound.new cid.to_s
-            @neighbors << c if c.assays #and !(c.targets + c.non_targets).empty?
+            @neighbors << c if c.assays and !c.assays.empty?
           end
         end if result and result["IdentifierList"]
 =begin
@@ -122,7 +134,7 @@ module OpenTox
         neighbors.collect{|n| n.assays.collect{|a| a["AID"]}}.flatten.compact.uniq.each do |aid|
           predicted_assay = {"AID" => aid}
           neighbors.each do |neighbor|
-            if similarity(neighbor) > 0.5 # avoid downweighting
+            if similarity(neighbor) and similarity(neighbor) > 0.5 # avoid downweighting
               search = neighbor.assays.select{|a| a["AID"] == aid}
               search.each do |assay|
                 predicted_assay["Target GI"] ||= assay["Target GI"]
@@ -168,11 +180,11 @@ module OpenTox
     end
 
     def predicted_targets
-      predicted_active_assays.select{|a| a[:target_gi]} if predicted_assays
+      predicted_active_assays.select{|a| a["Target GI"]} if predicted_assays
     end
 
     def predicted_non_targets
-      inactive_assays.select{|a| a[:target_gi]} if predicted_assays
+      predicted_inactive_assays.select{|a| a["Target GI"]} if predicted_assays
     end
 
     def to_smiles

@@ -1,43 +1,37 @@
-%script{:type => "text/javascript", :src  => "sorttable.js"}
-%table{:class => "sortable"}
+%table
   - session[:compound].neighbors[0..10].each do |compound|
     %tr
+      %th Structure
+      %th Similarity
+      %th Targets (experimental data)
+      %th Other active assays (experimental data)
+
+    %tr
       %td{:valign => "top"}
+        %br= compound.name
         %img{:src => compound.image_uri}
       %td{:id => "sim#{compound.cid}", :valign => "top"}
-        %img{:src => "/spinning-wait-icons/wait30trans.gif"}
         :javascript
-          $.ajax({
-            url: "/cid/#{session[:compound].cid}/cosine/#{compound.cid}",
-            success: function(data){
-              $("#sim#{compound.cid}").html(data);
-            },
-            error: function(data,textStatus,message){
-              $("#sim#{compound.cid}").html(message);
-            }
-          });
+          display("#sim#{compound.cid}", "/cid/#{session[:compound].cid}/cosine/#{compound.cid}");
       %td{:id => "targets#{compound.cid}", :valign => "top"}
-        %img{:src => "/spinning-wait-icons/wait30trans.gif"}
         :javascript
-          $.ajax({
-            url: "/cid/#{compound.cid}/targets",
-            success: function(data){
-              $("#targets#{compound.cid}").html(data);
-            },
-            error: function(data,textStatus,message){
-              $("#targets#{compound.cid}").html(message);
-            }
-          });
+          display("#targets#{compound.cid}", "/cid/#{compound.cid}/targets");
       %td{:id => "assays#{compound.cid}", :valign => "top"}
-        %img{:src => "/spinning-wait-icons/wait30trans.gif"}
         :javascript
-          $.ajax({
-            url: "/cid/#{compound.cid}/other_active_assays",
-            success: function(data){
-              $("#assays#{compound.cid}").html(data);
-            },
-            error: function(data,textStatus,message){
-              $("#assays#{compound.cid}").html(message);
-            }
-          });
+          display("#assays#{compound.cid}", "/cid/#{compound.cid}/other_active_assays");
+    
+    %tr
+      %th 
+      %th 
+      %th Non-targets (experimental data)
+      %th Other inactive assays (experimental data)
+
+    %tr
       %td
+      %td
+      %td{:id => "targets#{compound.cid}", :valign => "top"}
+        :javascript
+          display("#targets#{compound.cid}", "/cid/#{compound.cid}/nontargets");
+      %td{:id => "assays#{compound.cid}", :valign => "top"}
+        :javascript
+          display("#assays#{compound.cid}", "/cid/#{compound.cid}/other_inactive_assays");
