@@ -3,6 +3,26 @@
   %head
     %script{:type => "text/javascript", :src  => "jquery-1.8.2.js"}
     :javascript
+      function show(title,element,uri) {
+        $(element).html("<h4>"+title+"</h4>"+"<img src=\"/spinning-wait-icons/wait30trans.gif\" alt=\"Searching PubChem\">");
+        $.ajax({
+          cache: true,
+          url: uri,
+          success: function(data){
+            data = "<h4>"+title+"</h4>"+"<button onclick='hide(\"" + title + "\",\"" + element + "\",\"" + uri + "\");'>Hide</button>" + data;
+            $(element).html(data);
+          },
+          error: function(data,textStatus,message){
+            $(element).html(message);
+          }
+        });
+      }
+
+      function hide(title,element,uri) {
+        data = "<h4>"+title+"</h4>"+"<button onclick='show(\"" + title + "\",\""  + element + "\",\"" + uri + "\");'>Show</button>";
+        $(element).html(data);
+      }
+
       function display(element,uri) {
         $(element).html("<img src=\"/spinning-wait-icons/wait30trans.gif\" alt=\"Searching PubChem\">");
         $.ajax({
@@ -18,7 +38,7 @@
       }
 
   %body
-    %h1 adverse outcome pathways
+    %h1 AOP read across
     %form{:name => "form", :action => '/search', :method => "GET"}
       %fieldset
         %label{:for => 'name'} Compound name:

@@ -1,37 +1,33 @@
 %table
-  - session[:compound].neighbors[0..10].each do |compound|
-    %tr
-      %th Structure
-      %th Similarity
-      %th Targets (experimental data)
-      %th Other active assays (experimental data)
-
-    %tr
-      %td{:valign => "top"}
-        %br= compound.name
-        %img{:src => compound.image_uri}
-      %td{:id => "sim#{compound.cid}", :valign => "top"}
-        :javascript
-          display("#sim#{compound.cid}", "/cid/#{session[:compound].cid}/cosine/#{compound.cid}");
-      %td{:id => "targets#{compound.cid}", :valign => "top"}
-        :javascript
-          display("#targets#{compound.cid}", "/cid/#{compound.cid}/targets");
-      %td{:id => "assays#{compound.cid}", :valign => "top"}
-        :javascript
-          display("#assays#{compound.cid}", "/cid/#{compound.cid}/other_active_assays");
-    
-    %tr
-      %th 
-      %th 
-      %th Non-targets (experimental data)
-      %th Other inactive assays (experimental data)
-
-    %tr
-      %td
-      %td
-      %td{:id => "targets#{compound.cid}", :valign => "top"}
-        :javascript
-          display("#targets#{compound.cid}", "/cid/#{compound.cid}/nontargets");
-      %td{:id => "assays#{compound.cid}", :valign => "top"}
-        :javascript
-          display("#assays#{compound.cid}", "/cid/#{compound.cid}/other_inactive_assays");
+  %colgroup
+    %col{:width => "25%"}
+    %col{:width => "37%"}
+    %col{:width => "37%"}
+  - idx = 0
+  - while idx < 10
+    - @compound.neighbors.each do |n|
+      - unless n.assays.empty?
+        %tr
+          %td{:valign => "top"}
+            %br
+              = n.name
+              (
+              = @compound.cosine(n).round(3)
+              )
+            %img{:src => n.image_uri}
+          %td{:valign => "top"}
+            %p{:id => "targets#{n.cid}"}
+              :javascript
+                hide("Measured gene/protein targets","#targets#{n.cid}", "/cid/#{n.cid}/targets");
+            %p{:id => "nontargets#{n.cid}"}
+              :javascript
+                hide("Measured gene/protein non-targets","#nontargets#{n.cid}", "/cid/#{n.cid}/nontargets");
+          %td{:valign => "top"}
+            %p{:id => "assays#{n.cid}"}
+              :javascript
+                hide("Other active assays","#assays#{n.cid}", "/cid/#{n.cid}/other_active_assays");
+            %p{:id => "inactive_assays#{n.cid}"}
+              :javascript
+                hide("Other inactive assays","#inactive_assays#{n.cid}", "/cid/#{n.cid}/other_inactive_assays");
+        
+        - idx += 1

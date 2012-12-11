@@ -1,5 +1,5 @@
 %dl
-  - @assays.sort{|a,b| [b[:p_active],b[:p_inactive]].max <=> [a[:p_active],a[:p_inactive]].max}.each do |assay|
+  - @assays.sort{|a,b| [b["p_active"],b["p_inactive"]].max <=> [a["p_active"],a["p_inactive"]].max}.each do |assay|
     %dt
       %a{:href => "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay["AID"]}"} #{assay['Assay Name']}
     %dd
@@ -7,7 +7,7 @@
       %a{:href => "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay["AID"]}"} #{assay['AID']}
     %dd
       p_active:
-      = assay[:p_active].to_f.round(3)
+      = assay["p_active"].to_f.round(3)
     %dd
       p_inactive:
-      = assay[:p_inactive].to_f.round(3)
+      = assay["p_inactive"].to_f.round(3)
