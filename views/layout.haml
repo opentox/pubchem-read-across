@@ -1,10 +1,10 @@
 !!! 5
 %html
   %head
-    %script{:type => "text/javascript", :src  => "jquery-1.8.2.js"}
+    %script{:type => "text/javascript", :src  => "/jquery-1.8.2.js"}
     :javascript
       function show(title,element,uri) {
-        $(element).html("<h4>"+title+"</h4>"+"<img src=\"/spinning-wait-icons/wait30trans.gif\" alt=\"Searching PubChem\">");
+        $(element).html("<h4>"+title+"</h4>"+"Retrieving data from PubChem. This may take some time, please be patient."+"<img src=\"/spinning-wait-icons/wait30trans.gif\" alt=\"Searching PubChem\">");
         $.ajax({
           cache: true,
           url: uri,
@@ -24,7 +24,7 @@
       }
 
       function display(element,uri) {
-        $(element).html("<img src=\"/spinning-wait-icons/wait30trans.gif\" alt=\"Searching PubChem\">");
+        $(element).html("Retrieving data from PubChem. This may take some time, please be patient."+"<img src=\"/spinning-wait-icons/wait30trans.gif\" alt=\"Searching PubChem\">");
         $.ajax({
           cache: true,
           url: uri,

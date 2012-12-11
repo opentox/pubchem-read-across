@@ -2,7 +2,7 @@
   More than one compound found for
   = "\"#{params[:name]}\"."
   Please select a structure:
-- @compounds.each do |compound|
-  %a{:href => "/cid/#{compound.cid}"}
-    %img{:src => compound.image_uri }
+- @cids.each do |cid|
+  %a{:href => "/cid/#{cid}"}
+    %img{:src => image_uri(cid)}
 

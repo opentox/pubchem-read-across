@@ -1,21 +1,14 @@
 :javascript
   $(document).ready(function() {
-    /*/ prefetch predictions in order to fill cache in background
-    $.ajax({ 
-      url: "/cid/#{@compound.cid}/predicted_targets",
-      cache: true,
-      dataType: "html"
-    });
-    */
-    hide("Measured gene/protein targets",".targets", "/cid/#{@compound.cid}/targets");
-    hide("Other active assays",".active_assays", "/cid/#{@compound.cid}/other_active_assays");
-    hide("Measured gene/protein non-targets",".nontargets", "/cid/#{@compound.cid}/nontargets");
-    hide("Other inactive assays",".inactive_assays", "/cid/#{@compound.cid}/other_inactive_assays");
-    hide("Read across gene/protein targets",".predicted_targets", "/cid/#{@compound.cid}/predicted_targets");
-    hide("Other active read across assays",".predicted_active_assays", "/cid/#{@compound.cid}/other_predicted_active_assays");
-    hide("Read across gene/protein non-targets",".predicted_nontargets", "/cid/#{@compound.cid}/predicted_nontargets");
-    hide("Other inactive read across assays",".predicted_inactive_assays", "/cid/#{@compound.cid}/other_predicted_inactive_assays");
-    hide("Similar compounds",".neighbors", "/cid/#{@compound.cid}/neighbors");
+    hide("Gene/protein targets (experimental)",".targets", "/cid/#{@cid}/targets/active");
+    hide("Other active assays (experimental)",".active_assays", "/cid/#{@cid}/assays/active");
+    hide("Gene/protein non-targets (experimental)",".nontargets", "/cid/#{@cid}/targets/inactive");
+    hide("Other inactive assays (experimental)",".inactive_assays", "/cid/#{@cid}/assays/inactive");
+    hide("Gene/protein targets (read across)",".predicted_targets", "/cid/#{@cid}/prediction/targets/active");
+    hide("Other active assays (read across)",".predicted_active_assays", "/cid/#{@cid}/prediction/assays/active");
+    hide("Gene/protein non-targets (read across)",".predicted_nontargets", "/cid/#{@cid}/prediction/targets/inactive");
+    hide("Other inactive assays (read across)",".predicted_inactive_assays", "/cid/#{@cid}/prediction/assays/inactive");
+    hide("Similar compounds",".neighbors", "/cid/#{@cid}/neighbors");
   });
 
 %table
@@ -25,8 +18,11 @@
     %col{:width => "37%"}
   %tr
     %td{:valign => "top"}
-      %br= @compound.name
-      %img{:src => @compound.image_uri}
+      %br
+        = name(@cid)
+        CID:
+        = @cid
+      %img{:src => image_uri(@cid)}
     %td{:valign => "top"}
       .targets
       .predicted_targets

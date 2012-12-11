@@ -7,4 +7,4 @@ require './application.rb'
 #  :verbose => true,
 #  :metastore   => "memcached://127.0.0.1:11211/meta",
 #  :entitystore => "memcached://127.0.0.1:11211/body"
-run OpenTox::Application
+run Application

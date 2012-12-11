@@ -21,7 +21,12 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 1.9.2'
 
   # specify any dependencies here; for example:
-  s.add_runtime_dependency "opentox-server"
-  s.post_install_message = "Please configure your service in ~/.opentox/config/aop.rb"
+  s.add_runtime_dependency "sinatra"
+  s.add_runtime_dependency "sinatra-contrib"
+  s.add_runtime_dependency "haml"
+  s.add_runtime_dependency "yajl-ruby"
+  s.add_runtime_dependency "rest-client"
+  s.add_runtime_dependency "rest-client-components"
+  s.add_runtime_dependency "memcache-client"
 end
 
