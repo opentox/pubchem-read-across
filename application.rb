@@ -211,6 +211,9 @@ class Application < Sinatra::Base
       result = pubchem_search File.join(PUG_URI, "compound", "listkey", listkey, "cids", "JSON")
     end
     result["IdentifierList"]["CID"].delete params[:cid].to_i
+    #result["IdentifierList"]["CID"].each do |cid|
+    #  @result << cid unless assays(cid,"active").empty? and assays(cid,"inactive").empty?
+    #end
     @result = result["IdentifierList"]["CID"].to_json
   end
 
