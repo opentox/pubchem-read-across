@@ -1,0 +1,13 @@
+PubChem read across
+===================
+
+Caching proxy and GUI for PubChem read across predictions
+
+Requirements: memcached
+
+Usage:
+
+# start memcached
+memcached -d -m 2048 -l localhost -p 11211 -u nobody
+# start unicorn
+unicorn -c unicorn.rb -E production
