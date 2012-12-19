@@ -3,11 +3,13 @@
   %head
     %script{:type => "text/javascript", :src  => "/jquery-1.8.2.js"}
     :javascript
+      $(document).ready(function() { $.ajax({ url: "/cid/#{@cid}/experiments", cache: true }); });
       function show(title,element,uri) {
         $(element).html("<h4>"+title+"</h4>"+"Retrieving data from PubChem. This may take some time, please be patient."+"<img src=\"/spinning-wait-icons/wait30trans.gif\" alt=\"Searching PubChem\">");
         $.ajax({
           cache: true,
           url: uri,
+          //timeout: 120000;
           success: function(data){
             data = "<h4>"+title+"</h4>"+"<button onclick='hide(\"" + title + "\",\"" + element + "\",\"" + uri + "\");'>Hide</button>" + data;
             $(element).html(data);
@@ -28,6 +30,7 @@
         $.ajax({
           cache: true,
           url: uri,
+          //timeout: 120000;
           success: function(data){
             $(element).html(data);
           },
@@ -44,4 +47,5 @@
         %label{:for => 'name'} Compound name:
         %input{:type => 'text', :name => 'name', :id => 'name'}
         %input{ :type => "submit", :value => "Search" }
+    %em This is an experimental version. Loading data from PubChem can be slow. Please use the "Back" button and retry the offending operation if you have timeout problems.
     = yield

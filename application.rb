@@ -123,7 +123,7 @@ class Application < Sinatra::Base
   end
 
   after '/pug/*' do
-    CACHE.add request.path, @result, 7200
+    CACHE.add request.path, @result, 72000 if @result
   end
 
   before '/cid/:cid/*' do
@@ -136,6 +136,9 @@ class Application < Sinatra::Base
 
   get '/cid/:cid/?' do
     @cid = params[:cid] 
+    #local("/pug/cid/#{@cid}/predictions")
+    pid = Process.fork{ local("/pug/cid/#{@cid}/predictions") }
+    Process.detach pid
     haml :compound
   end
 
@@ -144,8 +147,9 @@ class Application < Sinatra::Base
     if !@cids or @cids.empty?
       haml :not_found
     elsif @cids.size == 1
-      @cid = @cids.first
-      haml :compound
+      redirect to("/cid/#{@cids.first}")
+      #@cid = @cids.first
+      #haml :compound
     else
       haml :select
     end
@@ -218,7 +222,11 @@ class Application < Sinatra::Base
   end
 
   get '/pug/name/:name' do
+  begin
     @result = RestClient.get(File.join(PUG_URI,"compound","name",CGI.escape(params[:name]),"cids","TXT")).split("\n").to_json
+  rescue
+    @result = nil
+  end
   end
 
   get '/pug/cid/:cid/image' do

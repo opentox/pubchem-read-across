@@ -28,5 +28,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "rest-client"
   s.add_runtime_dependency "rest-client-components"
   s.add_runtime_dependency "memcache-client"
+  s.add_runtime_dependency "unicorn"
 end
 
