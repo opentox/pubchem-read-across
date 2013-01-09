@@ -1,32 +1,33 @@
 %table
   %colgroup
-    %col{:width => "25%"}
-    %col{:width => "37%"}
-    %col{:width => "37%"}
+    %col{:style => "width: 300px"}
+    %col{:style => "width: 47%"}
+    %col{:style => "width: 47%"}
   - idx = 0
   - while idx < 10
     - neighbors(@cid).each do |n|
       - unless assays(n,"active").empty? and assays(n,"inactive").empty?
         %tr
-          %td{:valign => "top"}
-            %br
-              = name n
-              (
-              = similarity(@cid,n).round(3)
-              )
-            %img{:src => image_uri(n)}
-          %td{:valign => "top"}
-            %p{:id => "targets#{n}"}
+          %th{:valign => "top", :colspan => "3"}
+            = name n
+            (
+            = similarity(@cid,n).round(3)
+            )
+        %tr
+          %td{:style => "vertical-align:top;"}
+            %img{:src => image_uri(n), :alt => "#{name n}", :class => "compound"}
+          %td{:style => "vertical-align:top;"}
+            %p{:id => "targets#{n}", :class => "neighbors"}
               :javascript
                 hide("Measured gene/protein targets","#targets#{n}", "/cid/#{n}/targets/active");
-            %p{:id => "nontargets#{n}"}
+            %p{:id => "nontargets#{n}", :class => "neighbors"}
               :javascript
                 hide("Measured gene/protein non-targets","#nontargets#{n}", "/cid/#{n}/targets/inactive");
-          %td{:valign => "top"}
-            %p{:id => "assays#{n}"}
+          %td{:style => "vertical-align:top;"}
+            %p{:id => "assays#{n}", :class => "neighbors"}
               :javascript
                 hide("Other active assays","#assays#{n}", "/cid/#{n}/assays/active");
-            %p{:id => "inactive_assays#{n}"}
+            %p{:id => "inactive_assays#{n}", :class => "neighbors"}
               :javascript
                 hide("Other inactive assays","#inactive_assays#{n}", "/cid/#{n}/assays/inactive");
         

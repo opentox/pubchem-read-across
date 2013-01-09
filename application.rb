@@ -301,4 +301,11 @@ class Application < Sinatra::Base
     @fp.sort!{|a,b| b["p_active"] <=> a["p_active"]}
     haml :fp
   end
+
+  # SASS stylesheet
+  get '/style.css' do
+    headers 'Content-Type' => 'text/css; charset=utf-8'
+    scss :style
+  end
+
 end

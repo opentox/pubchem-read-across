@@ -1,0 +1,104 @@
+/* conf */
+$formbg: #F5F5F5;
+$formborder: #D0D0D0;
+
+/* general */
+body {
+  margin: {
+    left: 20px;
+    right: 20px;
+    top: 0px;
+  }
+  font: {
+    family: arial,helvetica,clean,sans-serif;
+  }
+}
+
+/* headings */
+h1 {
+  font: {
+    family: Helvetia, Verdana, sans;
+    weight: bold;
+    size: 1.4em;
+  }
+  color: #333;
+  margin-top: 10px;
+}
+h4 {
+  color: #333;
+  font-size: 0.9em;
+  margin-top: 0px;
+  margin-bottom: 6px;
+  font-weight: 900;
+  border-bottom: {
+    color: #efefef;
+    style: solid;
+    width: 0.1px;
+  }
+}
+
+/* tables */
+th {
+  color: #333;
+  text-align: left;
+  font-size: 1em;
+}
+td {
+  vertical-align: top;
+}
+
+/* form */
+fieldset {
+  border: {
+    style: solid;
+    width: 1px;
+    color: $formborder;
+    radius: 4px;
+  }
+  background-color: $formbg;
+}
+button {
+  margin-bottom: 10px;
+}
+
+/* lists */
+dl {
+  border: {
+    style: solid;
+    width: 1px;
+    color: #efefef;
+    radius: 4px;
+  }
+}
+dt {
+  font-size: 0.9em;
+}
+dd {
+  font-size: 0.8em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+  color: #00A;
+  &:hover { color: #A00; }
+}
+
+/* block-elements */
+p.neighbors {
+  margin-top: 0px;
+}
+
+/* others */
+em {
+  font-size: 0.8em;
+}
+
+img.compound {
+  border: {
+    width: 1px;
+    style: solid;
+    color: $formborder;
+    radius: 4px;
+  }
+}
