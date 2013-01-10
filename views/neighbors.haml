@@ -8,7 +8,7 @@
     - neighbors(@cid).each do |n|
       - unless assays(n,"active").empty? and assays(n,"inactive").empty?
         %tr
-          %th{:valign => "top", :colspan => "3"}
+          %th{:style => "vertical-align:top;", :colspan => "3"}
             = name n
             (
             = similarity(@cid,n).round(3)

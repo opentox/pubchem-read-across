@@ -143,6 +143,7 @@ class Application < Sinatra::Base
   end
 
   get '/search/?' do
+    redirect to("/") if params[:name].empty?
     @cids = from_name params[:name]
     if !@cids or @cids.empty?
       haml :not_found
