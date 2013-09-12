@@ -29,5 +29,9 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "rest-client-components"
   s.add_runtime_dependency "memcache-client"
   s.add_runtime_dependency "unicorn"
+
+  # external requirements
+  s.requirements "memcached"
+  s.post_install_message = "Please make sure you have memcached installed."
 end
 
