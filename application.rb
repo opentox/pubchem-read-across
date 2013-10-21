@@ -116,6 +116,11 @@ class Application < Sinatra::Base
     end
   end
 
+  before do
+    @accept = request.env['HTTP_ACCEPT']
+    response['Content-Type'] = @accept
+  end
+
   before '/pug/*' do
     content_type 'application/json'
     @result = CACHE.get request.path
