@@ -12,6 +12,7 @@ class Application < Sinatra::Base
   set :root, File.dirname(__FILE__)
 
   # doc @ http://pubchem.ncbi.nlm.nih.gov/pug_rest/
+  # doc @ http://pubchem.ncbi.nlm.nih.gov/pug_rest/PUG_REST.html
   PUG_URI = "http://pubchem.ncbi.nlm.nih.gov/rest/pug/"
   SIMILARITY_THRESHOLD = 90
   MAX_NEIGHBORS = 100
@@ -116,9 +117,20 @@ class Application < Sinatra::Base
     end
   end
 
-  before do
-    @accept = request.env['HTTP_ACCEPT']
-    response['Content-Type'] = @accept
+  def csv_file type
+    case type
+    when "target"
+      out = "\"Target Name\";\"Target GeneID\";\"Assay IDs\"\n"
+      @assays.collect{|a| [a["Target Name"],a["Target GI"]]}.uniq.sort{|a,b| a[0] <=> b[0]}.each do |target|
+        out += "\"#{target.first}\";\"#{target.last}\";\"" + @assays.select{|a| a["Target GI"] == target.last}.collect{|assay| "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay["AID"]}"}.join(", ") + "\"\n"
+      end
+    when "target_readacross"
+      out = "\"Target Name\";\"Target GeneID\";\"Assay ID\";\"p_active\";\"p_inactive\"\n"
+      @assays.sort{|a,b| [b["p_active"],b["p_inactive"]].max <=> [a["p_active"],a["p_inactive"]].max}.each do |assay|
+        out += "\"#{assay['Target Name']}\";\"#{assay['Target GI']}\";\"http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay['AID']}\";\"#{assay['p_active'].to_f.round(3)}\";\"#{assay['p_inactive'].to_f.round(3)}\"\n"
+      end
+    end
+    out
   end
 
   before '/pug/*' do
@@ -132,6 +144,7 @@ class Application < Sinatra::Base
   end
 
   before '/cid/:cid/*' do
+    @accept = request.env['HTTP_ACCEPT']
     @cid = params[:cid] 
   end
 
@@ -163,7 +176,19 @@ class Application < Sinatra::Base
 
   get '/cid/:cid/targets/:outcome' do
     @assays = targets params[:cid], params[:outcome]
-    @assays and !@assays.empty? ? haml(:targets, :layout => false) : "<p><em>No PubChem data</em></p>" 
+    if @accept == "application/json"
+      content_type = @accept
+      @assays and !@assays.empty? ? JSON.pretty_generate(@assays) : "No PubChem data\n"
+    elsif @accept == "text/csv"
+      @assays and !@assays.empty? ? csv_file("target") : "No PubChem data\n"
+    else
+      @assays and !@assays.empty? ? haml(:targets, :layout => false) : "<p><em>No PubChem data</em></p>"
+    end
+  end
+
+  get '/cid/:cid/targets/:outcome/:file' do
+    response['Content-Type'] = "text/csv"
+    RestClient.get "#{request.host_with_port}/cid/#{params[:cid]}/targets/#{params[:outcome]}",{:accept => "text/csv"}
   end
 
   get '/cid/:cid/assays/:outcome' do
@@ -178,7 +203,19 @@ class Application < Sinatra::Base
 
   get '/cid/:cid/prediction/targets/:outcome' do
     @assays = predicted_targets params[:cid], params[:outcome]
-    @assays and !@assays.empty? ? haml(:predicted_targets, :layout => false) : "<p><em>Insuffucient PubChem data for read across predictions.</em></p>"
+    if @accept == "application/json"
+      content_type = @accept
+      @assays and !@assays.empty? ? JSON.pretty_generate(@assays) : "No PubChem data\n"
+    elsif @accept == "text/csv"
+      @assays and !@assays.empty? ? csv_file("target_readacross") : "No PubChem data\n"
+    else
+      @assays and !@assays.empty? ? haml(:predicted_targets, :layout => false) : "<p><em>Insuffucient PubChem data for read across predictions.</em></p>"
+    end
+  end
+
+  get '/cid/:cid/prediction/targets/:outcome/:file' do
+    response['Content-Type'] = "text/csv"
+    RestClient.get "#{request.host_with_port}/cid/#{params[:cid]}/prediction/targets/#{params[:outcome]}",{:accept => "text/csv"}
   end
 
   get '/cid/:cid/neighbors/?' do
