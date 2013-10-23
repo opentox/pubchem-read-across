@@ -14,7 +14,8 @@
           url: uri,
           //timeout: 120000;
           success: function(data){
-            data = "<h4>"+title+"</h4>"+"<button onclick='hide(\"" + title + "\",\"" + element + "\",\"" + uri + "\");'>Hide</button> <a href=\"" + uri + "/" + uri.replace("/cid/", "").replace("/",'-','g') + ".csv\"> (csv)</a>" + data;
+            var slash = new RegExp("/","g");
+            data = "<h4>"+title+"</h4>"+"<button onclick='hide(\"" + title + "\",\"" + element + "\",\"" + uri + "\");'>Hide</button> <a href=\"" + uri + "/" + uri.replace("/cid/", "").replace(slash,'-') + ".csv\"> (csv)</a>" + data;
             $(element).html(data);
           },
           error: function(data,textStatus,message){
