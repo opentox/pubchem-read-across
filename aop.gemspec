@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "sinatra"
   s.add_runtime_dependency "sinatra-contrib"
   s.add_runtime_dependency "haml"
+  s.add_runtime_dependency "sass"
   s.add_runtime_dependency "yajl-ruby"
   s.add_runtime_dependency "rest-client"
   s.add_runtime_dependency "rest-client-components"
@@ -31,7 +32,8 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "unicorn"
 
   # external requirements
-  s.requirements "memcached"
+  s.requirements << "memcached"
   s.post_install_message = "Please make sure you have memcached installed."
+
 end
 
