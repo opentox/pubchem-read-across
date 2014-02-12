@@ -6,7 +6,7 @@
     %link{:rel=>'stylesheet', :href=>"#{'/style.css'}", :type => "text/css"}
     %script{:type => "text/javascript", :src  => "/jquery-1.8.2.js"}
     :javascript
-      $(document).ready(function() { $.ajax({ url: "/cid/#{@cid}/experiments", cache: true }); });
+      //$(document).ready(function() { $.ajax({ url: "/cid/#{@cid}/experiments", cache: true }); });
       function show(title,element,uri) {
         $(element).html("<h4>"+title+"</h4>"+"Retrieving data from PubChem. This may take some time, please be patient."+"<img src=\"/spinning-wait-icons/wait30trans.gif\" alt=\"Searching PubChem\">");
         $.ajax({
