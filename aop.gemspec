@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.name        = "aop"
   s.version     = File.read("./VERSION")
   s.authors     = ["Christoph Helma","Denis Gebele","Micha Rautenberg"]
-  s.email       = ["helma@in-silico.ch","gebele@in-silico.ch","rautenenberg@in-silico.ch"]
+  s.email       = ["helma@in-silico.ch","gebele@in-silico.ch","rautenberg@in-silico.ch"]
   s.homepage    = "http://github.com/OpenTox/task"
   s.summary     = %q{AOP GUI}
   s.description = %q{AOP GUI}
