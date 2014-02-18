@@ -168,12 +168,12 @@ class Application < Sinatra::Base
 
   get '/cid/:cid/prediction/assays/:outcome' do
     @assays = predicted_assays(params[:cid], params[:outcome]) - predicted_targets(params[:cid], params[:outcome])
-    @assays and !@assays.empty? ? haml(:predicted_assays, :layout => false) : "<p><em>Insuffucient PubChem data for read across predictions.</em></p>"
+    @assays and !@assays.empty? ? haml(:predicted_assays, :layout => false) : "<p><em>Insufficient PubChem data for read across predictions.</em></p>"
   end
 
   get '/cid/:cid/prediction/targets/:outcome' do
     @assays = predicted_targets params[:cid], params[:outcome]
-    @assays and !@assays.empty? ? haml(:predicted_targets, :layout => false) : "<p><em>Insuffucient PubChem data for read across predictions.</em></p>"
+    @assays and !@assays.empty? ? haml(:predicted_targets, :layout => false) : "<p><em>Insufficient PubChem data for read across predictions.</em></p>"
   end
 
   get '/cid/:cid/neighbors/?' do
