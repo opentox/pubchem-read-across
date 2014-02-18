@@ -1,34 +1,41 @@
+- @neighbors = []
+- neighbors(@cid).each do |n|
+  - unless assays(n,"active").empty? and assays(n,"inactive").empty?
+    - @neighbors << n
+
 %table
   %colgroup
     %col{:style => "width: 300px"}
     %col{:style => "width: 47%"}
     %col{:style => "width: 47%"}
-  - idx = 0
-  - while idx < 10
-    - neighbors(@cid).each do |n|
-      - unless assays(n,"active").empty? and assays(n,"inactive").empty?
-        %tr
-          %th{:style => "vertical-align:top;", :colspan => "3"}
-            = name n
-            (
-            = similarity(@cid,n).round(3)
-            )
-        %tr
-          %td{:style => "vertical-align:top;"}
-            %img{:src => image_uri(n), :alt => "#{name n}", :class => "compound"}
-          %td{:style => "vertical-align:top;"}
-            %p{:id => "targets#{n}", :class => "neighbors"}
-              :javascript
-                hide("Measured gene/protein targets","#targets#{n}", "/cid/#{n}/targets/active");
-            %p{:id => "nontargets#{n}", :class => "neighbors"}
-              :javascript
-                hide("Measured gene/protein non-targets","#nontargets#{n}", "/cid/#{n}/targets/inactive");
-          %td{:style => "vertical-align:top;"}
-            %p{:id => "assays#{n}", :class => "neighbors"}
-              :javascript
-                hide("Other active assays","#assays#{n}", "/cid/#{n}/assays/active");
-            %p{:id => "inactive_assays#{n}", :class => "neighbors"}
-              :javascript
-                hide("Other inactive assays","#inactive_assays#{n}", "/cid/#{n}/assays/inactive");
-        
-      - idx += 1
+
+  - unless @neighbors.empty? or @neighbors.nil?
+    - @neighbors.each do |n|
+      %tr
+        %th{:style => "vertical-align:top;", :colspan => "3"}
+          = name n
+          (
+          = similarity(@cid,n).round(3)
+          )
+      %tr
+        %td{:style => "vertical-align:top;"}
+          %img{:src => image_uri(n), :alt => "#{name n}", :class => "compound"}
+        %td{:style => "vertical-align:top;"}
+          %p{:id => "targets#{n}", :class => "neighbors"}
+            :javascript
+              hide("Measured gene/protein targets","#targets#{n}", "/cid/#{n}/targets/active");
+          %p{:id => "nontargets#{n}", :class => "neighbors"}
+            :javascript
+              hide("Measured gene/protein non-targets","#nontargets#{n}", "/cid/#{n}/targets/inactive");
+        %td{:style => "vertical-align:top;"}
+          %p{:id => "assays#{n}", :class => "neighbors"}
+            :javascript
+              hide("Other active assays","#assays#{n}", "/cid/#{n}/assays/active");
+          %p{:id => "inactive_assays#{n}", :class => "neighbors"}
+            :javascript
+              hide("Other inactive assays","#inactive_assays#{n}", "/cid/#{n}/assays/inactive");
+  - else
+    %tr
+      %td{ :colspan => "3"}
+        %em
+          Similar compounds depend on predicted assays and predicted targets.
