@@ -141,13 +141,9 @@ class Application < Sinatra::Base
       end
     when "neighbors"
       out = "\"Compound Name\";\"Similarity\"\n"
-      idx = 0
-      while idx < 10
-        neighbors(@cid).each do |n|
-          unless assays(n,"active").empty? and assays(n,"inactive").empty?
-            out += "\"#{name n}\";\"#{similarity(@cid,n).round(3)}\"\n"
-            idx += 1
-          end
+      neighbors(@cid).each do |n|
+        unless assays(n,"active").empty? and assays(n,"inactive").empty?
+          out += "\"#{name n}\";\"#{similarity(@cid,n).round(3)}\"\n"
         end
       end
     end
