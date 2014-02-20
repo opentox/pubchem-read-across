@@ -233,7 +233,7 @@ class Application < Sinatra::Base
     elsif @accept == "text/csv"
       @assays and !@assays.empty? ? csv_file("predicted_assays") : "No PubChem data\n"
     else
-      @assays and !@assays.empty? ? haml(:predicted_assays, :layout => false) : "<p><em>Insuffucient PubChem data for read across predictions.</em></p>"
+      @assays and !@assays.empty? ? haml(:predicted_assays, :layout => false) : "<p><em>Insufficient PubChem data for read across predictions.</em></p>"
     end
   end
 
@@ -245,7 +245,7 @@ class Application < Sinatra::Base
     elsif @accept == "text/csv"
       @assays and !@assays.empty? ? csv_file("target_readacross") : "No PubChem data\n"
     else
-      @assays and !@assays.empty? ? haml(:predicted_targets, :layout => false) : "<p><em>Insuffucient PubChem data for read across predictions.</em></p>"
+      @assays and !@assays.empty? ? haml(:predicted_targets, :layout => false) : "<p><em>Insufficient PubChem data for read across predictions.</em></p>"
     end
   end
 
