@@ -7,9 +7,9 @@
     %dd
       Assay IDs:
       - @assays.select{|a| a["Target GI"] == target.last}.each do |assay|
-        %a{:href => "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay["AID"]}", :rel => "_blank"} #{assay['AID']}
+        %a{:href => "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay["AID"]}", :rel => "external"} #{assay['AID']}
         :javascript
-          $('A[rel="_blank"]').each(function(){
-            $(this).attr('target', '_blank');
+          $('A[rel="external"]').each(function(){
+            $(this).attr('target', 'external');
           });
           
