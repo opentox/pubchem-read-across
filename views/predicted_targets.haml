@@ -6,7 +6,11 @@
       = assay["Target GI"]
     %dd
       Assay ID:
-      %a{:href => "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay["AID"]}"} #{assay["AID"]}
+      %a{:href => "http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=#{assay["AID"]}", :rel => "_blank"} #{assay["AID"]}
+      :javascript
+        $('A[rel="_blank"]').each(function(){
+          $(this).attr('target', '_blank');
+        });
     %dd
       p_active:
       = assay["p_active"].to_f.round(3)
