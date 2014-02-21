@@ -6,7 +6,8 @@ Caching proxy and GUI for PubChem read across predictions
 Requirements: memcached
 
 Usage:
-
+# edit unicorn.rb
+rename unicorn.rb.example to unicorn.rb
 # start memcached
 memcached -d -m 2048 -l localhost -p 11211 -u nobody
 # start unicorn
