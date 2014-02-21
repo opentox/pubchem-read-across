@@ -53,30 +53,33 @@
       About this service 
     :javascript
       $("#about").click(function() {
-        $("info").toggle();
+        $("#info").toggle();
       });
-    %info{:id=>"info", :style => "display:none;z-index:5;position:fixed; top:10px; left:25%; width: 50%; background-color:#F5F5F5;border:solid 1px black;"}
+    #info{:style => "display:none;z-index:5;position:fixed; top:10px; left:25%; width: 50%; background-color:#F5F5F5;border:solid 1px black;"}
       %button{:id => "x", :style => "position:absolute;right:0px;"} x
-      %div{:style => "align:justify;padding:1em;"}
-        %dt
-          (experimental)
-        %dd
-          Filtered experimental data from pubchem database.
-        %br
-        %dt
-          (read across)
-        %dd
-          Predictions - results of processed pubchem data.
-        %br
-        %dt
-          Predictions relationship
-        %dd
-          Similar compounds, predicted assays and predicted targets are related considering relevant data.
-          If data is insufficent there will be no result displayed.
       :javascript
         $("#x").click(function() {
-          $("info").toggle();
+          $("#info").toggle();
         });
+        
+      %div{:style => "align:justify;padding:1em;"}
+        %dl
+          %dt
+            (experimental)
+          %dd
+            Filtered experimental data from pubchem database.
+            %br
+          %dt
+            (read across)
+          %dd
+            Predictions - results of processed pubchem data.
+            %br
+          %dt
+            Predictions relationship
+          %dd
+            Similar compounds, predicted assays and predicted targets are related considering relevant data.
+            If data is insufficent there will be no result displayed.
+
     %form{:name => "form", :action => '/search', :method => "GET"}
       %fieldset
         %label{:for => 'name'} Compound name:
