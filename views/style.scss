@@ -7,7 +7,7 @@ body {
   margin: {
     left: 20px;
     right: 20px;
-    top: 0px;
+    top: 8px;
   }
   font: {
     family: arial,helvetica,clean,sans-serif;
@@ -15,14 +15,22 @@ body {
 }
 
 /* headings */
-h1 {
-  font: {
-    family: Helvetia, Verdana, sans;
-    weight: bold;
-    size: 1.4em;
+.logo {
+  img {
+    float: left;
+    display: inline;
+    margin-right: 1em;
   }
-  color: #333;
-  margin-top: 10px;
+
+  h1 {
+    font: {
+      family: Helvetia, Verdana, sans;
+      weight: bold;
+      size: 1.4em;
+    }
+    color: #333;
+    margin-top: 10px;
+  }
 }
 h4 {
   color: #333;
