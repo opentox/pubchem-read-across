@@ -1,2 +1,4 @@
 Gemfile.lock
 .sass-cache/
+README.local
+log/

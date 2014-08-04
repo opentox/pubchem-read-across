@@ -5,6 +5,10 @@ require "rest-client"
 require 'memcache'
 require "yajl"
 require 'yajl/json_gem'
+require 'logger'
+
+Dir.mkdir('log') unless File.exist?('log')
+$logger = Logger.new('log/development.log')
 
 class Application < Sinatra::Base
 
@@ -20,6 +24,7 @@ class Application < Sinatra::Base
 
   configure :development do
     register Sinatra::Reloader
+    $logger.level = Logger::DEBUG
   end
 
   helpers do
@@ -58,6 +63,7 @@ class Application < Sinatra::Base
     end
 
     def from_name name
+      $logger.debug "name:\t#{name}"
       cids = local("/pug/name/#{CGI.escape(name)}")
     end
 
@@ -68,7 +74,7 @@ class Application < Sinatra::Base
     end
 
     def assays cid, outcome
-      experiments(cid).select{|a| a["Activity Outcome"] == outcome} 
+      experiments(cid).select{|a| a["Bioactivity Outcome"] == outcome.capitalize}
     rescue
     end
 
@@ -78,10 +84,10 @@ class Application < Sinatra::Base
     end
 
     def predicted_assays cid, outcome
-      case outcome
-      when "active"
+      case outcome.capitalize
+      when "Active"
         predictions(cid).select{|a| a["p_active"] > a["p_inactive"]} 
-      when "inactive"
+      when "Inactive"
         predictions(cid).select{|a| a["p_active"] < a["p_inactive"]} 
       end
     rescue
@@ -142,7 +148,7 @@ class Application < Sinatra::Base
     when "neighbors"
       out = "\"Compound Name\";\"Similarity\"\n"
       neighbors(@cid).each do |n|
-        unless assays(n,"active").empty? and assays(n,"inactive").empty?
+        unless assays(n,"Active").empty? and assays(n,"Inactive").empty?
           out += "\"#{name n}\";\"#{similarity(@cid,n).round(3)}\"\n"
         end
       end
@@ -295,7 +301,7 @@ class Application < Sinatra::Base
     end
     result["IdentifierList"]["CID"].delete params[:cid].to_i
     #result["IdentifierList"]["CID"].each do |cid|
-    #  @result << cid unless assays(cid,"active").empty? and assays(cid,"inactive").empty?
+    #  @result << cid unless assays(cid,"Active").empty? and assays(cid,"Inactive").empty?
     #end
     @result = result["IdentifierList"]["CID"].to_json
   end
@@ -325,9 +331,9 @@ class Application < Sinatra::Base
       neighbor_assays = experiments cid
       unless neighbor_assays.empty?
         neighbor_assays.each do |assay|
-          if assay["Activity Outcome"] == "active" or assay["Activity Outcome"] == "inactive"
+          if assay["Bioactivity Outcome"] == "Active" or assay["Bioactivity Outcome"] == "Inactive"
             assays[assay["AID"]] ||= []
-            assays[assay["AID"]] << [cid,similarity(params[:cid],cid),assay["Activity Outcome"]]
+            assays[assay["AID"]] << [cid,similarity(params[:cid],cid),assay["Bioactivity Outcome"]]
             assay_details[assay["AID"]] ||= {}
             ["Target GI", "Target Name", "Assay Name"].each do |d|
               assay_details[assay["AID"]][d] = assay[d] #if assay[d]
@@ -343,10 +349,10 @@ class Application < Sinatra::Base
         cid = neighbor[0]
         sim = neighbor[1]
         activity = neighbor[2]
-        if activity == "active"
+        if activity == "Active"
           prediction[:p_active] ? prediction[:p_active] = prediction[:p_active]*sim : prediction[:p_active] = sim
           prediction[:p_inactive] ? prediction[:p_inactive] = prediction[:p_inactive]*(1-sim) : prediction[:p_inactive] = 1-sim
-        elsif activity == "inactive"
+        elsif activity == "Inactive"
           prediction[:p_active] ? prediction[:p_active] = prediction[:p_active]*(1-sim) : prediction[:p_active] = 1-sim
           prediction[:p_inactive] ? prediction[:p_inactive] = prediction[:p_inactive]*sim : prediction[:p_inactive] = sim
         end
