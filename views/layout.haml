@@ -68,24 +68,45 @@
         });
         
       %div{:style => "align:justify;padding:1em;"}
+        %h3
+          Predict targets potentially affected by a given chemical structure.
+        Enter a chemical name, smiles structure, etc and press "Search" to obtain search results and predictions. |
+        The system will search the <a href="http://pubchem.ncbi.nlm.nih.gov/">PubChem</a> database for | 
+        (i) experimental data of the query compound and |
+        (ii) structurally similar compounds (neighbors) and their experimental data. |
+        Predictions for the query compound are derived from the neighbors experimental data using an automated |
+        read-across algorithm.
+        %br
+        %br
+        The results page is organized according to the following dimensions:
         %dl
           %dt
-            (experimental)
+            Gene/protein targets vs. other assays:
           %dd
-            Filtered experimental data from pubchem database.
+            PubChem Assays with known Gene/Protein targets are listed in the first column, assays without known |
+            targets are in the "Other assays" column.
             %br
             %br
           %dt
-            (read across)
+            Active vs. inactive targets/assays:
           %dd
-            Predictions - results of processed pubchem data.
+            Targets/assays with positive outcomes are listed as targets/active assays, negative outcomes are |
+            filed under non-targets/ inactive assays.
             %br
             %br
           %dt
-            Predictions relationship
+            Experimental vs. read across:
           %dd
-            Similar compounds, predicted assays and predicted targets are related considering relevant data.
-            If data is insufficent there will be no result displayed.
+            Experimental data for the query compound is labelled with "experimental", read-across predictions |
+            are labelled with "read across". In case of insufficient data no results will be displayed.i
+            %br
+            %br
+          %dt
+            Similar compounds
+          %dd
+            Detailed information about the compounds used for read across predictions (and their experimental data)
+        %br
+        <small>Source code for the project can be obtained from <a href="https://github.com/opentox/pubchem-read-across">Github</a></small>.
 
     %form{:name => "form", :action => '/search', :method => "GET"}
       %fieldset
