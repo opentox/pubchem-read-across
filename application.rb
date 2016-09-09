@@ -315,7 +315,7 @@ class Application < Sinatra::Base
   end
 
   get '/pug/cid/:cid/image' do
-    @result = RestClient.get File.join(PUG_URI, "compound", "cid", params[:cid], "PNG")
+    @result = RestClient.get(File.join(PUG_URI, "compound", "cid", params[:cid], "PNG")).body
   end
 
   get '/pug/cid/:cid1/cosine/:cid2' do
